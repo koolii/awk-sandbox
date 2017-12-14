@@ -7,8 +7,8 @@ function ex () {
   echo $input | eval $1; echo;
 }
 
-function exWithInput() {
-  printf "$ echo \"$input\" "" | $1 \n=> "
+function ex_direct() {
+  printf "$ echo \"$1\" "" | $2 \n=> "
   echo $1 | eval $2; echo;
 }
 
