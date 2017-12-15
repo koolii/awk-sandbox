@@ -49,3 +49,60 @@ echo 'abcde' | grep -o 'b.*'
 
 caseof '文字列の縦=>横変換(文字列を一文字ずつ分離して夫々に改行を挿入する)も瞬時に可能'
 echo 'abcde' | grep -o '.'
+
+section '4.3 文字列の置換(sub/gsub)'
+
+caseof '最初にマッチした文字列だけを置換'
+echo "$ echo 'abcde' | awk '{sub(/./, \"A\"); print \$0}'"
+echo 'abcde' | awk '{sub(/./, "A"); print $0}'
+caseof 'マッチした全ての文字列を置換'
+echo "$ echo 'abcde' | awk '{gsub(/./, \"A\"); print \$0}'"
+echo 'abcde' | awk '{gsub(/./, "A"); print $0}'
+
+memo 'sub()/gsub()が取る引数は
+第一引数：置換対象になる正規表現
+第二引数：置換後の文字列
+第三引数：置換対象文字列（省略すると$0が使われる）'
+
+caseof 'よくある間違いとして、sub()/gsub()は共に戻り値が「置換に成功した個数」ということ
+今回だとマッチした5が帰り、それを$0に代入しているので5が出力された'
+echo "$ echo 'abcde' | awk '\$0 = gsub(/./, \"A\")'"
+echo 'abcde' | awk '$0 = gsub(/./, "A")'
+
+caseof '正しいがマッチするものがなかった場合は0が返るため何も出力されない'
+echo "$ echo 'abcde' | awk 'gsub(/z/, \"Z\")'\n =>"
+echo 'abcde' | awk 'gsub(/z/, "Z")'
+
+caseof '正しい省略バージョン
+代入式をなしにする。そうすると、$0はそのまま最初の文字列（といっても置換されている)が出力される
+今回は""を追加して、数値が0の場合にも対処している'
+echo "$ echo 'abcde' | awk 'gsub(/./, "A") \"\"'"
+echo 'abcde' | awk 'gsub(/./, "A") ""'
+
+section '4.4 文字列の連接'
+
+caseof 'AWKで文字列をつなげる場合は、つなげる文字列の間にスペースを配置する(明確に異なる場合はスペースも要らない)'
+echo "$ echo 'abcde' | awk '{print \$0 \"fghij\"}'"
+echo 'abcde' | awk '{print $0 "fghij"}'
+
+caseof 'sprintf()を使った文字列連接'
+echo "$ echo 'abcde' | awk '{print sprintf(\"%s%s\", \$0, \"fghij\")}'"
+echo 'abcde' | awk '{print sprintf("%s%s", $0, "fghij")}'
+
+caseof 'printf()を使った文字列連接'
+echo "$ echo 'abcde' | awk '{print printf(\"%s%s\\\n\", \$0, \"fghij\")}'"
+echo 'abcde' | awk '{print sprintf("%s%s\n", $0, "fghij")}'
+
+section '4.5 大文字小文字変換'
+
+caseof 'upper'
+echo "$ echo 'abcde' | awk '{print toupper(\$0)}'"
+echo 'abcde' | awk '{print toupper($0)}'
+
+caseof 'lower'
+echo "$ echo 'ABCDE' | awk '{print tolower(\$0)}'"
+echo 'ABCDE' | awk '{print tolower($0)}'
+
+caseof '大文字小文字を無視した条件分岐'
+echo "$ echo 'Awk' | awk 'tolower(\$0) == \"awk\"'"
+echo 'Awk' | awk 'tolower($0) == "awk"'
