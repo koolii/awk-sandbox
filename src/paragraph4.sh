@@ -32,3 +32,20 @@ index()は最初の引数に対象となる文字列、2番目の引数に検索
 substr()とindex()は文字列抜き出しの中でもよく用いられるテクニックらしい'
 
 section '4.2 文字列の検索(grep,match)'
+echo "$ echo 'abcde' | awk '\$0 ~ /b.*/'"
+echo 'abcde' | awk '$0 ~ /b.*/'
+echo "$ echo 'abcde' | awk 'match(\$0, /b.*/)'"
+echo 'abcde' | awk 'match($0, /b.*/)'
+
+caseof '↑の結果自体は同じだが、match()は特殊な関数で、値を返すだけでなく、組み込み変数RSTARTとRLENGTHをセットするから
+RSTARTにはマッチした最初の位置、RLENGTHにはマッチした長さが格納される
+ただ、match()よりもマッチ演算子~で解決出来ることが多い'
+echo "$ echo 'abcde' | awk 'match(\$0, /b.*/) {print RSTART, RLENGTH}'"
+echo 'abcde' | awk 'match($0, /b.*/) {print RSTART, RLENGTH}'
+
+caseof 'grepコマンドの引数として-oオプションをつけると正規表現にマッチした部分だけを抜き出すスクリプトになる'
+echo "$ echo 'abcde' | grep -o 'b.*'"
+echo 'abcde' | grep -o 'b.*'
+
+caseof '文字列の縦=>横変換(文字列を一文字ずつ分離して夫々に改行を挿入する)も瞬時に可能'
+echo 'abcde' | grep -o '.'
