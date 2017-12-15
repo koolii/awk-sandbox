@@ -73,8 +73,41 @@ echo "$ echo \"a b c\" | awk '{i = 2; while (i <= NF) a = a OFS \$(i++); print a
 echo "a b c" | awk '{i = 2; while (i <= NF) a = a OFS $(i++); print a}'
 
 section '3.5 フィールドの計算'
+caseof '横方向の集計処理ではforを使う'
+echo "$ echo \"1 2 3\" | awk '{for (i = 1; i <= NF; i++) sum += \$i; print sum}'"
+echo "1 2 3" | awk '{for (i = 1; i <= NF; i++) sum += $i; print sum}'
 
+caseof '行数が多くなければ使用出来るシェル芸'
+memo 'bashの配列$PIPESTATUS[@]が全て0かどうかを判断する時に、著者がよく使っているらしい
+$PIPESTATUS[@]の値はechoなどで表示すると戻り値がスペース区切りになっているので、すべてを足した結果が0であれば全てのパイプでエラーが無いことになる'
+echo "$ echo \"1 2 3\" | tr ' ' '+' | bc"
+echo "1 2 3" | tr ' ' '+' | bc
 
+caseof 'BMIを計算する(weight/height)'
+echo "$ echo \"50 160\" | awk '{print \$1 / (\$2 / 100) ^ 2}'"
+echo "50 160" | awk '{print $1 / ($2 / 100) ^ 2}'
 
+section '3.6 フィールドの再構築'
+caseof 'csvをスペース区切りにしたいが、↓だと変わらない'
+echo "$ echo \"a,b,c\" | awk -F',' -v OFS=' ' '4'"
+echo "a,b,c" | awk -F',' -v OFS=' ' '4'
+
+memo '上記のコマンドは"a,b,c"を読み込んだ際にawkがフィールド分割を行っているだけで、新しくフィールドを再構築していないため
+新しくフィールドを再構築し、新しいレコードを作成するには、$1 = $1と言う変わった文法をフィールドの再構築と呼ぶ。
+フィールドに新しく変数が代入された時に初めてOFSに従ってフィールドとレコードを再構築すると言うAWKの挙動を利用したもの(ちなみに全てのAWKで使える)
+
+ただし、注意点としては、代入された結果が偽は駄目(左辺値)'
+
+caseof '$1 = $1 によるフィールドの再構築'
+echo "$ echo \"a,b,c\" | awk -F',' -v OFS=' ' '\$1 = \$1'"
+echo "a,b,c" | awk -F',' -v OFS=' ' '$1 = $1'
+
+caseof '偽の場合の何も出力されない証明(0が含まれている)'
+echo "$ echo \"0,1,2\" | awk -F',' -v OFS=' ' '\$1 = \$1'\n =>"
+echo "0,1,2" | awk -F',' -v OFS=' ' '$1 = $1'
+
+caseof '偽の場合でも出力されるようにアクションで記述する(0が含まれている)'
+memo 'なぜアクションだと$1 = $1が偽になっても出力されるのか分からない。↑は真偽値によって、出力するしないを分けているが、こちらは単に処理だから？'
+echo "0,1,2" | awk -F',' -v OFS=' ' '{$1 = $1; print}'
 
 # \
