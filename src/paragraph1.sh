@@ -3,26 +3,27 @@
 . src/function.sh
 
 caseof "* 数字の0のパターン"
-exWithInput "number zero" "awk '0'"
+ex_direct "number zero" "awk '0'"""
 
 caseof "* 0以外の数字"
-exWithInput "number without zero" "awk '4'"
+ex_direct "number without zero" "awk '4'"""
 
 caseof "* 文字列の0"
-exWithInput "zero as a string" "awk '0 ""'"
+ex_direct "zero as a string" "awk '0 ""'"""
 
 caseof "* 文字列のbar"
-exWithInput "bar is a string" "awk '"bar"'"
+ex_direct "bar is a string" "awk '"bar"'"""
 
 section "1.3 比較演算子,マッチング演算子"
 
-caseof "* \$0 比較演算子を使う"
-echo "use comparison operator" | awk '$0 == "use comparison operator"'
+# \\
+caseof '* $0 比較演算子を使う'
+# ex_direct "use comparison operator" "awk '$0 == "use comparison operator"' """
 
-echo "\nYou can understand awk's boolean is number blow"
+echo "\nYou can understand awk comparison is number blow"
 caseof "* print result comparison"
 caseof "** pattern true"
-echo "foo" | awk '{print ($0 == "foo")}'
+ex_direct "foo" "awk '{print ($0 == "foo")}'"
 
 caseof "** pattern false"
 echo "foo" | awk '{print ($0 != "foo")}'
