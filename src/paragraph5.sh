@@ -2,7 +2,7 @@
 
 . src/function.sh
 
-section '四則演算と数値演算関数'
+section '5. 四則演算と数値演算関数'
 
 caseof '数字は全て倍数精度浮動小数点数として扱われる'
 echo "$ echo '1 2 3 4 5' | awk '{print \$1 + \$2 - \$3 * \$4 / \$5}'"

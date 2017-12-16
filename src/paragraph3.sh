@@ -2,7 +2,8 @@
 
 . src/function.sh
 
-echo 'フィールドの操作'
+section "3. フィールドの操作"
+
 memo 'cutコマンドよりもはるかに強力で
 具体的には、1つのレコードの中をFS(Field Separator)で分割したものを1つ1つをフィールドと言う
 

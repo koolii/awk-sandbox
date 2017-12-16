@@ -2,7 +2,7 @@
 
 . src/function.sh
 
-section '4 文字列関数'
+section '4. 文字列関数'
 section '4.1 文字列の抜き出し(substr)'
 
 caseof '2文字目から後の文字列を取得する'

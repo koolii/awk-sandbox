@@ -2,7 +2,7 @@
 
 . src/function.sh
 
-section "2章 awkの行操作"
+section "2. awkの行操作"
 
 section "2.2 直接行を指定する"
 caseof '{print $0}を省略して、一行目だけを表示させる'
